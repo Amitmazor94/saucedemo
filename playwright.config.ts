@@ -12,6 +12,7 @@ export default defineConfig({
     headless: false,
     launchOptions: {
       slowMo: 500,
+      args: ['--start-maximized'],
     },
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
@@ -20,7 +21,12 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+        viewport: null,
+        deviceScaleFactor: undefined,
+      },
     },
   ],
 });
