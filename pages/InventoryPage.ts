@@ -8,6 +8,7 @@ export class InventoryPage extends BasePage {
   readonly inventoryItems: Locator;
   readonly sortDropdown: Locator;
   readonly productNames: Locator;
+  readonly productPrices: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -17,6 +18,7 @@ export class InventoryPage extends BasePage {
     this.inventoryItems = page.locator('[data-test="inventory-item"]');
     this.sortDropdown = page.locator('[data-test="product-sort-container"]');
     this.productNames = page.locator('[data-test="inventory-item-name"]');
+    this.productPrices = page.locator('[data-test="inventory-item-price"]');
   }
 
   addToCartButton(productName: string): Locator {
@@ -42,7 +44,24 @@ export class InventoryPage extends BasePage {
     await this.sortDropdown.selectOption('az');
   }
 
+  async sortByNameZToA(): Promise<void> {
+    await this.sortDropdown.selectOption('za');
+  }
+
+  async sortByPriceLowToHigh(): Promise<void> {
+    await this.sortDropdown.selectOption('lohi');
+  }
+
+  async sortByPriceHighToLow(): Promise<void> {
+    await this.sortDropdown.selectOption('hilo');
+  }
+
   async getProductNames(): Promise<string[]> {
     return this.productNames.allTextContents();
+  }
+
+  async getProductPrices(): Promise<number[]> {
+    const texts = await this.productPrices.allTextContents();
+    return texts.map((text) => Number(text.replace('$', '')));
   }
 }
