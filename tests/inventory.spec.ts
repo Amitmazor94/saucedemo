@@ -1,5 +1,6 @@
 import { test, expect } from '../fixtures/pom.fixture';
 import { users } from '../data/users';
+import { inventoryExpectedResults } from '../data/AssertionData';
 
 test.describe('Inventory', () => {
 
@@ -9,7 +10,7 @@ test.describe('Inventory', () => {
     await inventoryPage.sortByNameAToZ();
     const names = await inventoryPage.getProductNames();
     const sortedNames = [...names].sort((a, b) => a.localeCompare(b));
-    await expect(inventoryPage.sortDropdown).toHaveValue('az');
+    await expect(inventoryPage.sortDropdown).toHaveValue(inventoryExpectedResults.sortNameAToZ);
     expect(names).toEqual(sortedNames);
   });
 
@@ -19,7 +20,7 @@ test.describe('Inventory', () => {
     await inventoryPage.sortByNameZToA();
     const names = await inventoryPage.getProductNames();
     const sortedNames = [...names].sort((a, b) => b.localeCompare(a));
-    await expect(inventoryPage.sortDropdown).toHaveValue('za');
+    await expect(inventoryPage.sortDropdown).toHaveValue(inventoryExpectedResults.sortNameZToA);
     expect(names).toEqual(sortedNames);
   });
 
@@ -29,8 +30,16 @@ test.describe('Inventory', () => {
     await inventoryPage.sortByPriceLowToHigh();
     const prices = await inventoryPage.getProductPrices();
     const sortedPrices = [...prices].sort((a, b) => a - b);
-    await expect(inventoryPage.sortDropdown).toHaveValue('lohi');
+    await expect(inventoryPage.sortDropdown).toHaveValue(inventoryExpectedResults.sortPriceLowToHigh);
     expect(prices).toEqual(sortedPrices);  
+  });
+
+  test('shows the cart badge after adding a product', async ({ loginPage, inventoryPage }) => {
+    await loginPage.open();
+    await loginPage.login(users.standard.username, users.standard.password);
+    await inventoryPage.addProductToCart(inventoryExpectedResults.productName);
+
+    await expect(inventoryPage.cartBadge).toHaveText(inventoryExpectedResults.cartBadgeCount);
   });
 
   test('sorts items from high price to low price', async ({ loginPage, inventoryPage }) => {
@@ -39,7 +48,7 @@ test.describe('Inventory', () => {
     await inventoryPage.sortByPriceHighToLow();
     const prices = await inventoryPage.getProductPrices();
     const sortedPrices = [...prices].sort((a, b) => b - a);
-    await expect(inventoryPage.sortDropdown).toHaveValue('hilo');
+    await expect(inventoryPage.sortDropdown).toHaveValue(inventoryExpectedResults.sortPriceHighToLow);
     expect(prices).toEqual(sortedPrices);
   });
   
