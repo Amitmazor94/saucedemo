@@ -4,9 +4,12 @@ import { inventoryExpectedResults } from '../data/AssertionData';
 
 test.describe('Inventory', () => {
 
-  test('sorts items from A to Z', async ({ loginPage, inventoryPage}) => {
+  test.beforeEach(async({loginPage})=>{
     await loginPage.open();
     await loginPage.login(users.standard.username, users.standard.password);
+  })
+
+  test('sorts items from A to Z', async ({inventoryPage}) => {
     await inventoryPage.sortByNameAToZ();
     const names = await inventoryPage.getProductNames();
     const sortedNames = [...names].sort((a, b) => a.localeCompare(b));
@@ -14,9 +17,7 @@ test.describe('Inventory', () => {
     expect(names).toEqual(sortedNames);
   });
 
-  test('sorts items from Z to A', async ({ loginPage, inventoryPage}) => {
-    await loginPage.open();
-    await loginPage.login(users.standard.username, users.standard.password);
+  test('sorts items from Z to A', async ({inventoryPage}) => {
     await inventoryPage.sortByNameZToA();
     const names = await inventoryPage.getProductNames();
     const sortedNames = [...names].sort((a, b) => b.localeCompare(a));
@@ -24,9 +25,7 @@ test.describe('Inventory', () => {
     expect(names).toEqual(sortedNames);
   });
 
-  test('sorts items from low price to high price', async ({ loginPage, inventoryPage}) => {
-    await loginPage.open();
-    await loginPage.login(users.standard.username, users.standard.password);
+  test('sorts items from low price to high price', async ({inventoryPage}) => {
     await inventoryPage.sortByPriceLowToHigh();
     const prices = await inventoryPage.getProductPrices();
     const sortedPrices = [...prices].sort((a, b) => a - b);
@@ -34,17 +33,12 @@ test.describe('Inventory', () => {
     expect(prices).toEqual(sortedPrices);  
   });
 
-  test('shows the cart badge after adding a product', async ({ loginPage, inventoryPage }) => {
-    await loginPage.open();
-    await loginPage.login(users.standard.username, users.standard.password);
+  test('shows the cart badge after adding a product', async ({inventoryPage }) => {
     await inventoryPage.addProductToCart(inventoryExpectedResults.productName);
-
     await expect(inventoryPage.cartBadge).toHaveText(inventoryExpectedResults.cartBadgeCount);
   });
 
-  test('sorts items from high price to low price', async ({ loginPage, inventoryPage }) => {
-    await loginPage.open();
-    await loginPage.login(users.standard.username, users.standard.password);
+  test('sorts items from high price to low price', async ({inventoryPage}) => {
     await inventoryPage.sortByPriceHighToLow();
     const prices = await inventoryPage.getProductPrices();
     const sortedPrices = [...prices].sort((a, b) => b - a);
