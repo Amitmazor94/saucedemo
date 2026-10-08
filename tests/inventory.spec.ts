@@ -38,6 +38,15 @@ test.describe('Inventory', () => {
     await expect(inventoryPage.cartBadge).toHaveText(inventoryExpectedResults.cartBadgeCount);
   });
 
+  test('shows the chosen product in the cart', async ({ inventoryPage, cartPage }) => {
+    const productNames = await inventoryPage.getProductNames();
+    const productName = productNames[Math.floor(Math.random() * productNames.length)];
+    await inventoryPage.addProductToCart(productName);
+    await inventoryPage.cartBadge.click();
+    await expect(cartPage.cartItems).toHaveText([productName]);
+    console.log("productName: "+productName);
+  });
+
   test('sorts items from high price to low price', async ({inventoryPage}) => {
     await inventoryPage.sortByPriceHighToLow();
     const prices = await inventoryPage.getProductPrices();
