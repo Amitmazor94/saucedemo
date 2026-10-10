@@ -9,6 +9,8 @@ export class InventoryPage extends BasePage {
   readonly sortDropdown: Locator;
   readonly productNames: Locator;
   readonly productPrices: Locator;
+  readonly removeButton: Locator;
+  readonly listOfItems: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -19,17 +21,23 @@ export class InventoryPage extends BasePage {
     this.sortDropdown = page.locator('[data-test="product-sort-container"]');
     this.productNames = page.locator('[data-test="inventory-item-name"]');
     this.productPrices = page.locator('[data-test="inventory-item-price"]');
+    this.removeButton = page.getByRole('button', { name: 'Remove' });
+    this.listOfItems= page.locator('[data-test="inventory-item"]');
+    
   }
 
-  addToCartButton(productName: string): Locator {
-    return this.page
-      .locator('[data-test="inventory-item"]')
+  findAddToCartButton(productName: string): Locator {
+    return this.listOfItems
       .filter({ hasText: productName })
       .locator('button');
   }
 
-  async addProductToCart(productName: string): Promise<void> {
-    await this.click(this.addToCartButton(productName));
+  async clickAddToCartButton(productName: string): Promise<void> {
+    await this.click(this.findAddToCartButton(productName));
+  }
+
+  async removeProduct(productName: string): Promise<void> {
+    await this.click(this.inventoryItems.filter({ hasText: productName }).locator(this.removeButton));
   }
 
   async openCart(): Promise<void> {

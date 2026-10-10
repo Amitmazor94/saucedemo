@@ -13,7 +13,7 @@ test.describe('Checkout', () => {
   })
   test('buy a product end to end', async ({inventoryPage,cartPage,checkoutPage,}) => {
     
-    await inventoryPage.addProductToCart(checkoutExpectedResults.productName);
+    await inventoryPage.clickAddToCartButton(checkoutExpectedResults.productName);
     await expect(inventoryPage.cartBadge).toHaveText(checkoutExpectedResults.cartBadgeCount);
     await inventoryPage.openCart();
     await expect(cartPage.cartItems).toHaveText([checkoutExpectedResults.productName]);

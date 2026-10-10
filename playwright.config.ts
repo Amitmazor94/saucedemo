@@ -7,7 +7,11 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   //workers: process.env.CI ? 1 : undefined,
   workers:1,
-  reporter: 'html',
+  reporter: [
+    ['html'],
+    ['line'],
+    ['allure-playwright', { resultsDir: 'allure-results' }],
+  ],
   use: {
     baseURL: 'https://www.saucedemo.com',
     headless: false,

@@ -34,17 +34,29 @@ test.describe('Inventory', () => {
   });
 
   test('shows the cart badge after adding a product', async ({inventoryPage }) => {
-    await inventoryPage.addProductToCart(inventoryExpectedResults.productName);
+    await inventoryPage.clickAddToCartButton(inventoryExpectedResults.productName);
     await expect(inventoryPage.cartBadge).toHaveText(inventoryExpectedResults.cartBadgeCount);
   });
 
   test('shows the chosen product in the cart', async ({ inventoryPage, cartPage }) => {
     const productNames = await inventoryPage.getProductNames();
     const productName = productNames[Math.floor(Math.random() * productNames.length)];
-    await inventoryPage.addProductToCart(productName);
+    await inventoryPage.clickAddToCartButton(productName);
     await inventoryPage.cartBadge.click();
     await expect(cartPage.cartItems).toHaveText([productName]);
     console.log("productName: "+productName);
+  });
+
+  test('removes a product from the cart', async ({ inventoryPage, cartPage }) => {
+    const productNames = await inventoryPage.getProductNames();
+    const productName = productNames[Math.floor(Math.random() * productNames.length)];
+    await inventoryPage.clickAddToCartButton(productName);
+    await inventoryPage.cartBadge.click();
+    await expect(cartPage.cartItems).toHaveText([productName]);
+    await cartPage.continueShopping();
+    await inventoryPage.removeProduct(productName);
+    await inventoryPage.openCart();
+    await expect(cartPage.cartItems).toHaveCount(0);
   });
 
   test('sorts items from high price to low price', async ({inventoryPage}) => {

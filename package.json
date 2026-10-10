@@ -6,13 +6,20 @@
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
-    "report": "playwright show-report"
+    "report": "playwright show-report",
+    "allure:report": "allure generate ./allure-results -o ./allure-report && allure open ./allure-report"
   },
-  "keywords": ["playwright", "pom", "typescript"],
+  "keywords": [
+    "playwright",
+    "pom",
+    "typescript"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.55.0",
-    "@types/node": "^22.13.14"
+    "@types/node": "^22.13.14",
+    "allure": "^3.20.1",
+    "allure-playwright": "^3.13.0"
   }
 }
