@@ -7,7 +7,8 @@
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "report": "playwright show-report",
-    "allure:report": "allure generate ./allure-results -o ./allure-report && allure open ./allure-report"
+    "allure:report": "allure generate ./allure-results -o ./allure-report && allure open ./allure-report",
+    "allure:clear": "node -e \"require('fs').rmSync('allure-results',{recursive:true,force:true}); require('fs').rmSync('allure-report',{recursive:true,force:true})\""
   },
   "keywords": [
     "playwright",
